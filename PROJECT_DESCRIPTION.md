@@ -49,7 +49,7 @@ The application enables event organizers to create and manage events while atten
 
 ## 3. Security Features Implementation
 
-### 3.1 Authentication (3 marks) ✅
+### 3.1 Authentication 
 
 #### Single-Factor Authentication
 - **Username + Password Login System**
@@ -79,7 +79,7 @@ The application enables event organizers to create and manage events while atten
 
 ---
 
-### 3.2 Authorization - Access Control (3 marks) ✅
+### 3.2 Authorization - Access Control
 
 #### Access Control Model (1.5 marks)
 - **Three User Roles with Distinct Subjects:**
@@ -107,7 +107,7 @@ The application enables event organizers to create and manage events while atten
 └─────────────┴──────────┴────────────┴──────────┘
 ```
 
-#### Policy Definition (1.5 marks)
+#### Policy Definition
 - **Role-Based Access Control (RBAC)**
   - Admin Policy: Unrestricted access to all resources
   - Organizer Policy: Event management, attendee management, pass validation
@@ -118,15 +118,12 @@ The application enables event organizers to create and manage events while atten
   - Database queries filtered by user role and ownership
   - API endpoints validate permissions before processing requests
 
-**Marks Justification:**
-- ACL Model: Well-defined subjects (3 roles) and objects (4+ resource types) - 1.5m
-- Policy Definition: Implemented RBAC with clear permission boundaries - 1.5m
 
 ---
 
-### 3.3 Encryption (3 marks) ✅
+### 3.3 Encryption 
 
-#### Key Exchange Mechanism (1.5 marks)
+#### Key Exchange Mechanism 
 - **RSA-2048 Keypair Generation**
   - Each user generates unique 2048-bit RSA keypair upon account creation
   - Public key stored in database for pass validation
@@ -152,7 +149,7 @@ Encrypt private key with master key
 Store encrypted private key
 ```
 
-#### Encryption & Decryption (1.5 marks)
+#### Encryption & Decryption 
 - **Hybrid Encryption Approach**
   - AES-256 (Symmetric): Fast encryption for large data
   - RSA-2048 (Asymmetric): Secure key wrapping
@@ -181,15 +178,12 @@ Store encrypted private key
 - Transaction records
 - Sensitive payment data
 
-**Marks Justification:**
-- Key Exchange: RSA-2048 keypair generation per user - 1.5m
-- Encryption/Decryption: Full hybrid encryption with AES-256 and RSA-2048 - 1.5m
 
 ---
 
-### 3.4 Hashing & Digital Signature (3 marks) ✅
+### 3.4 Hashing & Digital Signature
 
-#### Hashing with Salt (1.5 marks)
+#### Hashing with Salt 
 - **PBKDF2-SHA256 Implementation**
   - Algorithm: PBKDF2 (Password-Based Key Derivation Function 2)
   - Hash Function: SHA256
@@ -222,7 +216,7 @@ Iterations: 600,000
 Result Hash: $pbkdf2-sha256$600000$<salt>$<hash>
 ```
 
-#### Digital Signature (1.5 marks)
+#### Digital Signature 
 - **SHA256 + RSA Signature Scheme**
   - Hash Function: SHA256 for message digest
   - Signing Algorithm: RSA-2048 with PKCS#1 v1.5 padding
@@ -258,15 +252,13 @@ Result Hash: $pbkdf2-sha256$600000$<salt>$<hash>
 | Replay Attack | Timestamp validation prevents reuse |
 | Pass Cloning | Unique signature per pass instance |
 
-**Marks Justification:**
-- Hashing with Salt: PBKDF2-SHA256 with 600K iterations and unique salt per user - 1.5m
-- Digital Signature: SHA256 hash + RSA-2048 signing with verification - 1.5m
+
 
 ---
 
-### 3.5 Encoding Techniques (3 marks) ✅
+### 3.5 Encoding Techniques 
 
-#### Encoding Implementation (1 mark)
+#### Encoding Implementation 
 - **QR Code Generation**
   - Encodes critical pass information in QR format
   - Data includes: Pass ID, Event ID, User ID, Timestamp, Digital Signature
@@ -304,7 +296,7 @@ Display to User
 }
 ```
 
-#### Security Levels & Risks (1 mark)
+#### Security Levels & Risks 
 
 **Security Level Analysis:**
 
@@ -320,7 +312,7 @@ Display to User
 - Base64 is easily decoded (mitigated by encryption layer)
 - Timestamp can be observed (mitigated by short expiration)
 
-#### Possible Attacks & Mitigation (1 mark)
+#### Possible Attacks & Mitigation 
 
 **Attack 1: Pass Forgery**
 - **Attack Method**: Attacker creates fake pass with valid QR code
@@ -362,16 +354,12 @@ Attacker → HTTPS → Server (Encrypted)
       Pass Accepted/Rejected
 ```
 
-**Marks Justification:**
-- Encoding Implementation: QR Code + Base64 encoding - 1m
-- Security Levels & Risks: Documented risk analysis - 1m
-- Attack Prevention: 5+ documented attack scenarios with mitigations - 1m
+
 
 ---
 
-### 3.6 Viva (5 marks) ✅
 
-#### Complete Implementation (2 marks)
+
 The project demonstrates a **fully functional, production-ready** implementation:
 
 **Frontend Features:**
@@ -398,30 +386,6 @@ Passes Table: pass_id, user_id, event_id, digital_signature, status, created_at,
 AccessLogs Table: log_id, user_id, action, resource, timestamp, status
 ```
 
-#### Security Concepts Integration (2 marks)
-All security concepts are **cohesively integrated**:
-
-1. **Authentication Layer**
-   - Single-factor (password) + Multi-factor (TOTP)
-   - Session tokens for request validation
-
-2. **Authorization Layer**
-   - Role-based middleware on routes
-   - Object-level permissions on resources
-
-3. **Encryption Layer**
-   - AES-256 for data at rest
-   - RSA-2048 for key management
-   - HTTPS for data in transit
-
-4. **Integrity Layer**
-   - PBKDF2-SHA256 for password hashing
-   - RSA signatures for pass authenticity
-   - SHA256 for data verification
-
-5. **Encoding Layer**
-   - QR codes for pass display
-   - Base64 for binary data transport
 
 **Attack Surface Protection:**
 ```
@@ -442,24 +406,8 @@ All security concepts are **cohesively integrated**:
 └─────────────────────────────────────────────────────┘
 ```
 
-#### Clear Documentation (1 mark)
-- ✅ Code comments explaining security decisions
-- ✅ This comprehensive project description
-- ✅ API endpoint documentation
-- ✅ Security best practices guide
-- ✅ User workflow diagrams
-- ✅ Threat model analysis
-- ✅ Setup and deployment guide
 
-**Design Choices Documentation:**
 
-| Decision | Rationale | Alternative Considered |
-|----------|-----------|------------------------|
-| PBKDF2-SHA256 | Industry standard, proven secure | bcrypt (slower), scrypt (newer) |
-| RSA-2048 | Balances security & performance | RSA-4096 (slower), ECC (newer) |
-| AES-256 | Fast, proven, widely supported | AES-192, ChaCha20 |
-| TOTP (30s) | Standard for MFA apps | HOTP, SMS-based OTP |
-| Role-Based ACL | Simple, scalable, maintainable | Attribute-based, graph-based |
 
 ---
 
@@ -791,9 +739,4 @@ The system is **production-ready** and provides a **secure, scalable platform** 
 
 ---
 
-**Project Summary:**
-- 🛡️ **Security Score**: 15/15 marks
-- 📱 **User Experience**: Intuitive, role-based interface
-- 🔐 **Cryptographic Maturity**: Enterprise-grade security
-- 📊 **Scalability**: SQLite → PostgreSQL/MySQL migration ready
-- 📚 **Documentation**: Comprehensive and clear
+
