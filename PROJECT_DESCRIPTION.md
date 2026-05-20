@@ -13,7 +13,7 @@ The application enables event organizers to create and manage events while atten
 ### Primary Objectives:
 - **Secure Event Management**: Provide a platform for organizing events with robust security controls
 - **Digital Pass Generation**: Create tamper-proof, digitally signed event passes
-- **Multi-Level Access Control**: Implement role-based access with different permissions for admins, organizers, and attendees
+- **Multi-Level Access Control**: Implement role-based access with different permissions for organizers and attendees
 - **End-to-End Encryption**: Protect sensitive user data and pass information using hybrid encryption
 - **Fraud Prevention**: Prevent pass forgery through digital signatures and QR code validation
 - **Authentication Security**: Implement both single-factor and multi-factor authentication mechanisms
@@ -21,7 +21,7 @@ The application enables event organizers to create and manage events while atten
 ### Target Users:
 - **Event Organizers**: Create and manage events, validate attendee passes
 - **Attendees**: Generate and display event passes securely
-- **System Administrators**: Manage users, permissions, and system resources
+
 
 ---
 
@@ -79,7 +79,7 @@ The application enables event organizers to create and manage events while atten
 
 ### 3.2 Authorization - Access Control
 
-#### Access Control Model (1.5 marks)
+#### Access Control Model 6
 - **Three User Roles with Distinct Subjects:**
   1. **Admin**: System administrator with highest privileges
   2. **Organizer**: Event creator and manager
@@ -684,7 +684,6 @@ Sensitive Data → AES-256 Encryption
 - Incident response drills
 
 ---
-
 ## 9. Conclusion
 
 
