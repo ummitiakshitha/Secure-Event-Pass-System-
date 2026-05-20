@@ -500,44 +500,7 @@ AccessLogs Table: log_id, user_id, action, resource, timestamp, status
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Workflow 3: Admin System Management
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  1. Admin Registration                                  │
-│     - System-created admin account                      │
-│     - Full system permissions                           │
-│     - Access to all resources                           │
-└─────────────────────────────────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────────┐
-│  2. User Management                                     │
-│     - View all registered users                         │
-│     - Modify user roles and permissions                 │
-│     - Reset user passwords (with MFA backup codes)      │
-│     - Revoke suspicious accounts                        │
-│     - View user activity logs                           │
-└─────────────────────────────────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────────┐
-│  3. System Monitoring                                   │
-│     - Security event logs                               │
-│     - Failed authentication attempts                    │
-│     - Unauthorized access attempts                      │
-│     - Cryptographic operation logs                      │
-│     - Database audit trail                              │
-└─────────────────────────────────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────────┐
-│  4. Security Configuration                              │
-│     - Update encryption keys                            │
-│     - Configure MFA policies                            │
-│     - Set password requirements                         │
-│     - Manage SSL certificates                           │
-│     - Configure backup systems                          │
-└─────────────────────────────────────────────────────────┘
-```
-
+###
 ---
 
 ## 5. Security Architecture
