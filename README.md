@@ -1,7 +1,6 @@
 # 🎫 Secure Event Pass Generation & Access Validation System
 
 
-Secure Event Pass Generation and Access Validation issues cryptographically signed QR passes and enforces role-based, MFA-backed validation to prevent forgery and unauthorized entry.
 ---
 
 ## 🔐 Security Features Implemented
