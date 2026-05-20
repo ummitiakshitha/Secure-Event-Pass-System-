@@ -73,9 +73,7 @@ The application enables event organizers to create and manage events while atten
 - During login: Username → Password verification → TOTP code verification
 - Failed attempts logged for security auditing
 
-**Marks Justification:**
-- Single-Factor: Standard authentication mechanism (1.5m)
-- Multi-Factor: Added security layer using TOTP (1.5m)
+
 
 ---
 
@@ -726,14 +724,6 @@ Sensitive Data → AES-256 Encryption
 
 ## 9. Conclusion
 
-The **Secure Event Pass System** demonstrates a comprehensive implementation of modern security practices across all layers:
-
-✅ **Authentication**: Single-factor + Multi-factor (TOTP)
-✅ **Authorization**: Role-based ACL with multiple subjects/objects
-✅ **Encryption**: Hybrid encryption (AES-256 + RSA-2048)
-✅ **Hashing**: PBKDF2-SHA256 with unique salts (600K iterations)
-✅ **Signatures**: RSA-2048 digital signatures with SHA256
-✅ **Encoding**: QR codes + Base64 with documented risks
 
 The system is **production-ready** and provides a **secure, scalable platform** for event management with strong fraud prevention and user data protection.
 
