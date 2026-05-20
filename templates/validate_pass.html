@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Validate Pass - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <h2 style="color: #667eea; text-align: center; margin-bottom: 30px;">✅ Validate Event Pass</h2>
+    
+    <div class="security-info">
+        <h4>🔐 Pass Validation Security</h4>
+        <p>This validation process includes:</p>
+        <ul>
+            <li><strong>Authorization Check:</strong> Verifies you have permission to validate passes</li>
+            <li><strong>Digital Signature Verification:</strong> Ensures pass authenticity using SHA256+RSA</li>
+            <li><strong>One-Time Use:</strong> Prevents pass reuse</li>
+            <li><strong>Access Control:</strong> Only organizers and admins can validate</li>
+        </ul>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea;">Enter Pass Code</h3>
+        <form method="POST" action="{{ url_for('validate_pass') }}">
+            <div class="form-group">
+                <label for="pass_code">Pass Code</label>
+                <input type="text" id="pass_code" name="pass_code" required 
+                       placeholder="e.g., EVT0001ATT0001A1B2C3D4"
+                       style="font-family: monospace; font-size: 18px;"
+                       autofocus>
+                <small style="color: #6c757d;">Enter the complete pass code from the event pass</small>
+            </div>
+            
+            <button type="submit" class="btn" style="width: 100%; font-size: 18px; padding: 15px;">
+                🔍 Validate Pass
+            </button>
+        </form>
+    </div>
+    
+    <div class="card" style="background: #fff3cd; border: 2px solid #ffc107;">
+        <h4 style="color: #856404;">⚠️ Validation Requirements</h4>
+        <p><strong>You must have one of the following to validate passes:</strong></p>
+        <ul style="color: #856404;">
+            <li>Admin role (full access)</li>
+            <li>Organizer role for the specific event</li>
+            <li>Explicit validation permission granted via ACL</li>
+        </ul>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea;">Validation Process Flow</h3>
+        <ol style="line-height: 2;">
+            <li><strong>Pass Code Lookup:</strong> Find the pass in database</li>
+            <li><strong>Authorization Check:</strong> Verify validator permissions</li>
+            <li><strong>Signature Verification:</strong> Validate digital signature</li>
+            <li><strong>Usage Check:</strong> Ensure pass hasn't been used</li>
+            <li><strong>Mark as Used:</strong> Update pass status and timestamp</li>
+        </ol>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

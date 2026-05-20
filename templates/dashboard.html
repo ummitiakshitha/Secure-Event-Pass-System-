@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 30px;">
+    <h2 style="color: #667eea;">Welcome, {{ user.username }}! 
+        <span class="badge badge-{{ user.role }}">{{ user.role|upper }}</span>
+    </h2>
+</div>
+
+<div class="security-info">
+    <h4>🔐 Your Security Status</h4>
+    <ul>
+        <li>✅ Multi-Factor Authentication: <strong>Enabled</strong></li>
+        <li>✅ RSA Encryption Keys: <strong>Generated (2048-bit)</strong></li>
+        <li>✅ Password Protection: <strong>PBKDF2-SHA256 with Salt</strong></li>
+        <li>✅ Access Control: <strong>Role: {{ user.role }}</strong></li>
+    </ul>
+</div>
+
+<div style="margin: 30px 0;">
+    <h3 style="color: #667eea;">Quick Actions</h3>
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        {% if user.role == 'attendee' %}
+            <a href="{{ url_for('browse_events') }}" class="btn">🔍 Browse & Register for Events</a>
+        {% else %}
+            <a href="{{ url_for('create_event') }}" class="btn">➕ Create New Event</a>
+            <a href="{{ url_for('validate_pass') }}" class="btn btn-secondary">✅ Validate Pass</a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 40px;">
+    <h3 style="color: #667eea; margin-bottom: 20px;">
+        {% if user.role == 'organizer' %}
+            My Events (Organized)
+        {% elif user.role == 'admin' %}
+            All Events (Admin View)
+        {% else %}
+            My Registered Events
+        {% endif %}
+    </h3>
+    
+    {% if events %}
+    <div class="grid">
+        {% for event in events %}
+        <div class="card">
+            <h4 style="color: #667eea; margin-bottom: 15px;">{{ event.name }}</h4>
+            <p><strong>📅 Date:</strong> {{ event.date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+            <p><strong>📍 Venue:</strong> {{ event.venue }}</p>
+            {% if event.organizer_id == user.id %}
+                <span class="badge badge-organizer">Your Event</span>
+            {% endif %}
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('view_event', event_id=event.id) }}" class="btn">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <p style="color: #6c757d; font-size: 18px;">
+            {% if user.role == 'organizer' %}
+                No events created yet. Create your first event!
+            {% else %}
+                You haven't registered for any events yet. <a href="{{ url_for('browse_events') }}" style="color: #667eea; font-weight: bold; text-decoration: underline;">Browse available events</a> to register and generate a pass!
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+{% if my_passes %}
+<div style="margin-top: 40px;">
+    <h3 style="color: #667eea; margin-bottom: 20px;">🎫 My Event Passes</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Pass Code</th>
+                <th>Event</th>
+                <th>Status</th>
+                <th>Generated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pass in my_passes %}
+            <tr>
+                <td><code>{{ pass.pass_code }}</code></td>
+                <td>{{ pass.event.name }}</td>
+                <td>
+                    {% if pass.is_used %}
+                        <span class="badge badge-used">Used</span>
+                    {% else %}
+                        <span class="badge badge-valid">Valid</span>
+                    {% endif %}
+                </td>
+                <td>{{ pass.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <a href="{{ url_for('view_pass', pass_id=pass.id) }}" class="btn" style="padding: 8px 15px; font-size: 14px;">View Pass</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div style="margin-top: 40px;" class="card">
+    <h3 style="color: #667eea;">🛡️ Access Control Information</h3>
+    <p><strong>Your Role:</strong> {{ user.role|title }}</p>
+    <p><strong>Permissions:</strong></p>
+    <ul>
+        {% if user.role == 'admin' %}
+            <li>✅ Full system access (all events, users, passes)</li>
+            <li>✅ Create, read, update, delete all resources</li>
+            <li>✅ Validate any event pass</li>
+        {% elif user.role == 'organizer' %}
+            <li>✅ Create and manage your own events</li>
+            <li>✅ Access encrypted event details</li>
+            <li>✅ Validate passes for your events</li>
+            <li>✅ Generate passes for any event</li>
+        {% else %}
+            <li>✅ Register for events</li>
+            <li>✅ Generate event passes</li>
+            <li>✅ View your own passes</li>
+            <li>✅ Access events you're registered for</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

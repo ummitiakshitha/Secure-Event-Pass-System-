@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Create Event - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h2 style="color: #667eea; margin-bottom: 30px;">Create New Event</h2>
+    
+    <div class="security-info">
+        <h4>🔐 Data Encryption</h4>
+        <p>Event details will be encrypted using hybrid encryption:</p>
+        <ul>
+            <li><strong>AES-256:</strong> Encrypts event details (symmetric encryption for speed)</li>
+            <li><strong>RSA-2048:</strong> Encrypts the AES key (asymmetric encryption for security)</li>
+            <li>Only the event organizer can decrypt the full details</li>
+        </ul>
+    </div>
+    
+    <form method="POST" action="{{ url_for('create_event') }}">
+        <div class="form-group">
+            <label for="name">Event Name *</label>
+            <input type="text" id="name" name="name" required 
+                   placeholder="e.g., Tech Conference 2026">
+        </div>
+        
+        <div class="form-group">
+            <label for="date">Event Date & Time *</label>
+            <input type="datetime-local" id="date" name="date" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="venue">Venue *</label>
+            <input type="text" id="venue" name="venue" required 
+                   placeholder="e.g., Convention Center, Hall A">
+        </div>
+        
+        <div class="form-group">
+            <label for="details">Event Details (Encrypted) *</label>
+            <textarea id="details" name="details" required rows="6" 
+                      placeholder="Enter event description, schedule, speaker information, etc. This will be encrypted and only accessible to you."></textarea>
+            <small style="color: #667eea; font-weight: 600;">
+                🔒 This information will be encrypted with your RSA public key
+            </small>
+        </div>
+        
+        <div class="security-info">
+            <h4>Access Control Setup</h4>
+            <p>Upon creation, you will automatically receive the following permissions:</p>
+            <ul>
+                <li>✅ Read - View event details (including decrypted data)</li>
+                <li>✅ Write - Modify event information</li>
+                <li>✅ Delete - Remove the event</li>
+                <li>✅ Validate - Verify event passes</li>
+            </ul>
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn">Create Event (with Encryption)</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

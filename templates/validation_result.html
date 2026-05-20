@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Validation Result - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        {% if event_pass.is_used %}
+            <div style="font-size: 80px; margin-bottom: 20px;">✅</div>
+            <h2 style="color: #28a745;">Pass Validated Successfully!</h2>
+        {% else %}
+            <div style="font-size: 80px; margin-bottom: 20px;">❌</div>
+            <h2 style="color: #dc3545;">Validation Failed</h2>
+        {% endif %}
+    </div>
+    
+    <div class="card" style="background: {% if event_pass.is_used %}#d4edda{% else %}#f8d7da{% endif %}; border: 2px solid {% if event_pass.is_used %}#28a745{% else %}#dc3545{% endif %};">
+        <h3>Event Information</h3>
+        <table style="margin-top: 0;">
+            <tr>
+                <td><strong>Event Name:</strong></td>
+                <td>{{ event.name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date & Time:</strong></td>
+                <td>{{ event.date.strftime('%B %d, %Y at %I:%M %p') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Venue:</strong></td>
+                <td>{{ event.venue }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea;">Pass Details</h3>
+        <table style="margin-top: 0;">
+            <tr>
+                <td><strong>Pass Code:</strong></td>
+                <td><code style="font-size: 16px;">{{ event_pass.pass_code }}</code></td>
+            </tr>
+            <tr>
+                <td><strong>Attendee Name:</strong></td>
+                <td>{{ attendee.username }}</td>
+            </tr>
+            <tr>
+                <td><strong>Attendee Email:</strong></td>
+                <td>{{ attendee.email }}</td>
+            </tr>
+            <tr>
+                <td><strong>Pass Generated:</strong></td>
+                <td>{{ event_pass.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Validation Time:</strong></td>
+                <td>
+                    {% if event_pass.validated_at %}
+                        <strong>{{ event_pass.validated_at.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                    {% else %}
+                        Not validated yet
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Status:</strong></td>
+                <td>
+                    {% if event_pass.is_used %}
+                        <span class="badge badge-used" style="font-size: 16px;">USED</span>
+                    {% else %}
+                        <span class="badge badge-valid" style="font-size: 16px;">VALID</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="security-info">
+        <h4>🔐 Security Verification Results</h4>
+        <div style="line-height: 2;">
+            <p>✅ <strong>Pass Code Verified:</strong> Found in database</p>
+            <p>✅ <strong>Digital Signature:</strong> Valid (SHA256 + RSA-2048)</p>
+            <p>✅ <strong>Authorization Check:</strong> Validator has permission</p>
+            <p>✅ <strong>Authenticity:</strong> Pass is genuine, not forged</p>
+            {% if event_pass.is_used %}
+                <p>✅ <strong>One-Time Use:</strong> Pass marked as used, cannot be reused</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if event_pass.is_used %}
+    <div class="card" style="text-align: center; background: #28a745; color: white;">
+        <h2>✓ ENTRY GRANTED</h2>
+        <p style="font-size: 18px; margin-top: 15px;">
+            Welcome to {{ event.name }}!
+        </p>
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; background: #dc3545; color: white;">
+        <h2>✗ ENTRY DENIED</h2>
+        <p style="font-size: 18px; margin-top: 15px;">
+            This pass has already been used or is invalid.
+        </p>
+    </div>
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+        <a href="{{ url_for('validate_pass') }}" class="btn">Validate Another Pass</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

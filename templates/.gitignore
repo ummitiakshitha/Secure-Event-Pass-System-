@@ -1,0 +1,32 @@
+cat > .gitignore <<'EOF'
+# Byte‑compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+# Virtual environment
+venv/
+env/
+.virtualenv/
+# IDE / editor folders
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.vcxproj*
+*.log
+# Flask / Python runtime files
+instance/
+*.sqlite3
+*.db
+*.sqlite
+# Secrets / credentials
+.env
+*.env
+# OS‑generated files
+Thumbs.db
+Desktop.ini
+# Static media you don’t want versioned (optional)
+static/video/
+EOF

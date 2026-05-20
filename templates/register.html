@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #667eea; text-align: center; margin-bottom: 30px;">Create Account</h2>
+    
+    <div class="security-info">
+        <h4>Registration Security</h4>
+        <p>Your password will be hashed using PBKDF2-SHA256 with a unique salt. You'll receive a QR code for two-factor authentication setup.</p>
+    </div>
+    
+    <form method="POST" action="{{ url_for('register') }}">
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" required 
+                   placeholder="Choose a unique username">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required 
+                   placeholder="your.email@example.com">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" required 
+                   placeholder="Strong password (min 8 characters)"
+                   minlength="8">
+        </div>
+        
+        <div class="form-group">
+            <label for="role">Role *</label>
+            <select id="role" name="role" required>
+                <option value="attendee">Attendee (Event Participant)</option>
+                <option value="organizer">Organizer (Event Creator)</option>
+            </select>
+        </div>
+        
+        <div class="security-info">
+            <h4>🔐 Security Components Applied</h4>
+            <ul>
+                <li>Password hashing with salt (PBKDF2-SHA256, 600,000 iterations)</li>
+                <li>RSA-2048 keypair generation for encryption</li>
+                <li>TOTP secret generation for multi-factor authentication</li>
+            </ul>
+        </div>
+        
+        <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">
+            Register & Setup 2FA
+        </button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 20px;">
+        Already have an account? 
+        <a href="{{ url_for('login') }}" style="color: #667eea; font-weight: 600;">Login here</a>
+    </p>
+</div>
+{% endblock %}

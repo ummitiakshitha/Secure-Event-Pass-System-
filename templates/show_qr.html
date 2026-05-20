@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Setup 2FA - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <h2 style="color: #667eea; margin-bottom: 30px;">📱 Two-Factor Authentication Setup</h2>
+    
+    <div class="security-info" style="text-align: left;">
+        <h4>Setup Instructions</h4>
+        <ol style="line-height: 2;">
+            <li>Download an authenticator app (Google Authenticator, Authy, Microsoft Authenticator)</li>
+            <li>Scan the QR code below with your app</li>
+            <li>Or manually enter the secret key</li>
+            <li>Use the 6-digit code from the app when logging in</li>
+        </ol>
+    </div>
+    
+    <div class="card">
+        <h3>Scan this QR Code</h3>
+        <img src="data:image/png;base64,{{ qr_code }}" class="qr-code" alt="2FA QR Code">
+        
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+            <p style="font-weight: 600; margin-bottom: 10px;">Manual Entry Key:</p>
+            <p style="font-family: monospace; font-size: 18px; color: #667eea; word-break: break-all;">
+                {{ secret }}
+            </p>
+        </div>
+    </div>
+    
+    <div class="security-info" style="text-align: left;">
+        <h4>🔒 Security Note</h4>
+        <p>This secret key is unique to your account. Keep it secure! You'll need the authenticator app to generate codes every time you log in.</p>
+    </div>
+    
+    <a href="{{ url_for('login') }}" class="btn" style="margin-top: 30px;">
+        Continue to Login
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Event Pass - {{ event.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #667eea;">🎫 Your Event Pass</h2>
+        {% if event_pass.is_used %}
+            <span class="badge badge-used" style="font-size: 18px; padding: 10px 20px;">USED</span>
+        {% else %}
+            <span class="badge badge-valid" style="font-size: 18px; padding: 10px 20px;">VALID</span>
+        {% endif %}
+    </div>
+    
+    <div class="card" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h3>{{ event.name }}</h3>
+        <p style="font-size: 18px; margin: 15px 0;">
+            <strong>📅 {{ event.date.strftime('%B %d, %Y at %I:%M %p') }}</strong>
+        </p>
+        <p style="font-size: 16px;">📍 {{ event.venue }}</p>
+    </div>
+    
+    <div class="card" style="text-align: center;">
+        <h3 style="color: #667eea;">QR Code (Encoding: Base64 + QR)</h3>
+        <img src="data:image/png;base64,{{ event_pass.qr_code }}" class="qr-code" alt="Event Pass QR Code">
+        <p style="margin-top: 20px; color: #6c757d;">Scan this QR code at the event venue</p>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea;">Pass Details</h3>
+        <table style="margin-top: 0;">
+            <tr>
+                <td><strong>Pass Code:</strong></td>
+                <td><code style="font-size: 16px; color: #667eea;">{{ event_pass.pass_code }}</code></td>
+            </tr>
+            <tr>
+                <td><strong>Attendee:</strong></td>
+                <td>{{ attendee.username }} ({{ attendee.email }})</td>
+            </tr>
+            <tr>
+                <td><strong>Generated:</strong></td>
+                <td>{{ event_pass.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Status:</strong></td>
+                <td>
+                    {% if event_pass.is_used %}
+                        <span class="badge badge-used">Used</span> on {{ event_pass.validated_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                    {% else %}
+                        <span class="badge badge-valid">Valid - Not Yet Used</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="security-info">
+        <h4>🔐 Digital Signature Verification</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p><strong>Signature Algorithm:</strong> SHA256 + RSA-2048</p>
+                <p><strong>Signature Status:</strong> 
+                    {% if signature_valid %}
+                        <span style="color: #28a745; font-weight: 600;">✅ VALID - Authentic Pass</span>
+                    {% else %}
+                        <span style="color: #dc3545; font-weight: 600;">❌ INVALID - Possible Forgery</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+            <p style="font-size: 12px; margin: 0;"><strong>Digital Signature (Base64):</strong></p>
+            <p style="font-family: monospace; font-size: 11px; word-break: break-all; margin-top: 10px; color: #667eea;">
+                {{ event_pass.digital_signature[:100] }}...
+            </p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea;">🛡️ Security Technologies Used</h3>
+        <div class="grid">
+            <div>
+                <h4>Encoding</h4>
+                <ul>
+                    <li>✅ QR Code generation</li>
+                    <li>✅ Base64 encoding for image</li>
+                    <li>✅ JSON data encoding</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Hashing & Signature</h4>
+                <ul>
+                    <li>✅ SHA256 hashing</li>
+                    <li>✅ RSA-2048 signing</li>
+                    <li>✅ Digital signature for authenticity</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Verification</h4>
+                <ul>
+                    <li>✅ Signature validation</li>
+                    <li>✅ Unique pass code</li>
+                    <li>✅ One-time use tracking</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url_for('dashboard') }}" class="btn">← Back to Dashboard</a>
+        <a href="{{ url_for('view_event', event_id=event.id) }}" class="btn btn-secondary">View Event Details</a>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    @media print {
+        .nav, .footer, .btn {
+            display: none;
+        }
+        body {
+            background: white;
+        }
+        .container {
+            box-shadow: none;
+        }
+    }
+</style>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.name }} - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="color: #667eea;">{{ event.name }}</h2>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>📅 Event Information</h3>
+            <p><strong>Date:</strong> {{ event.date.strftime('%B %d, %Y') }}</p>
+            <p><strong>Time:</strong> {{ event.date.strftime('%I:%M %p') }}</p>
+            <p><strong>Venue:</strong> {{ event.venue }}</p>
+            <p><strong>Created:</strong> {{ event.created_at.strftime('%Y-%m-%d') }}</p>
+        </div>
+        
+        <div class="card">
+            <h3>🎫 Pass Statistics</h3>
+            <p><strong>Total Passes:</strong> {{ passes|length }}</p>
+            <p><strong>Used Passes:</strong> {{ passes|selectattr('is_used')|list|length }}</p>
+            <p><strong>Valid Passes:</strong> {{ passes|rejectattr('is_used')|list|length }}</p>
+        </div>
+    </div>
+    
+    {% if decrypted_details %}
+    <div class="card">
+        <h3>🔓 Decrypted Event Details (Organizer Only)</h3>
+        <div class="security-info">
+            <h4>Encryption Status: Decrypted Successfully ✅</h4>
+            <p>This information was encrypted with AES-256 and the key was encrypted with your RSA-2048 public key. Only you can decrypt it using your private key.</p>
+        </div>
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 15px;">
+            <pre style="white-space: pre-wrap; font-family: inherit;">{{ decrypted_details }}</pre>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% set attendee_ids = passes|map(attribute='attendee_id')|list %}
+    {% if session.get('role') == 'attendee' %}
+        {% if session.get('user_id') not in attendee_ids %}
+            <div class="card" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h3>Generate Your Event Pass</h3>
+                <p>Get your digital pass with QR code and digital signature</p>
+                <form method="POST" action="{{ url_for('generate_pass', event_id=event.id) }}" style="margin-top: 20px;">
+                    <button type="submit" class="btn" style="background: white; color: #667eea;">
+                        🎫 Generate Pass Now
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            {% set user_pass = (passes|selectattr('attendee_id', 'equalto', session.get('user_id'))|first) %}
+            {% if user_pass %}
+                <div class="card" style="text-align: center; border: 2px solid #28a745; background: #e8f5e9;">
+                    <h3 style="color: #28a745; margin-bottom: 10px;">✅ Registered</h3>
+                    <p style="color: #333; margin-bottom: 15px;">You have successfully generated a pass for this event.</p>
+                    <a href="{{ url_for('view_pass', pass_id=user_pass.id) }}" class="btn" style="background: #28a745; color: white; border: none;">
+                        🎫 View Event Pass
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    
+    {% if passes and (session.get('role') in ['organizer', 'admin'] or event.organizer_id == session.get('user_id')) %}
+    <div style="margin-top: 40px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">Generated Passes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pass Code</th>
+                    <th>Attendee</th>
+                    <th>Status</th>
+                    <th>Generated</th>
+                    <th>Validated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pass in passes %}
+                <tr>
+                    <td><code style="font-size: 12px;">{{ pass.pass_code }}</code></td>
+                    <td>{{ pass.attendee.username }}</td>
+                    <td>
+                        {% if pass.is_used %}
+                            <span class="badge badge-used">Used</span>
+                        {% else %}
+                            <span class="badge badge-valid">Valid</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ pass.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {% if pass.validated_at %}
+                            {{ pass.validated_at.strftime('%Y-%m-%d %H:%M') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    <div class="card" style="margin-top: 30px;">
+        <h3>🔐 Security Features Applied</h3>
+        <div class="grid">
+            <div>
+                <h4 style="color: #667eea;">Encryption</h4>
+                <ul>
+                    <li>Event details: AES-256 encrypted</li>
+                    <li>Encryption key: RSA-2048 protected</li>
+                    <li>Hybrid encryption for optimal security</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #667eea;">Access Control</h4>
+                <ul>
+                    <li>Role-based permissions</li>
+                    <li>ACL implementation</li>
+                    <li>Organizer-only data decryption</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #667eea;">Pass Security</h4>
+                <ul>
+                    <li>QR code encoding (Base64)</li>
+                    <li>Digital signatures (SHA256+RSA)</li>
+                    <li>Unique pass code generation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

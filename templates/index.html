@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px 0;">
+    <h2 style="color: #667eea; font-size: 2.5em; margin-bottom: 30px;">
+        Welcome to Secure Event Pass System
+    </h2>
+    
+    <div class="security-info" style="max-width: 800px; margin: 30px auto;">
+        <h4>🔒 Security Features Implemented</h4>
+        <ul style="text-align: left; line-height: 2;">
+            <li><strong>Multi-Factor Authentication:</strong> Password + OTP (TOTP)</li>
+            <li><strong>Password Security:</strong> PBKDF2-SHA256 with Salt</li>
+            <li><strong>Hybrid Encryption:</strong> RSA (2048-bit) + AES (256-bit)</li>
+            <li><strong>Digital Signatures:</strong> SHA256 Hash + RSA Signing</li>
+            <li><strong>Access Control:</strong> Role-Based + Access Control Lists (ACL)</li>
+            <li><strong>QR Code Encoding:</strong> Base64 + QR Code for pass validation</li>
+        </ul>
+    </div>
+    
+    <div style="margin-top: 50px;">
+        <a href="{{ url_for('login') }}" class="btn" style="margin: 10px;">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary" style="margin: 10px;">Register</a>
+    </div>
+    
+    <div style="margin-top: 50px; padding: 30px; background: #f8f9fa; border-radius: 10px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">System Overview</h3>
+        <div class="grid">
+            <div class="card">
+                <h4>👥 For Attendees</h4>
+                <p>Register, login with 2FA, generate event passes with QR codes, and manage your passes securely.</p>
+            </div>
+            <div class="card">
+                <h4>🎯 For Organizers</h4>
+                <p>Create events, manage encrypted event details, validate passes, and control access permissions.</p>
+            </div>
+            <div class="card">
+                <h4>🛡️ For Admins</h4>
+                <p>Full system access, user management, and comprehensive event oversight with security monitoring.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

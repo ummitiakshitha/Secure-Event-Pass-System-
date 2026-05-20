@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Events - Event Pass System{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="color: #667eea;">📅 Browse Available Events</h2>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    {% if events %}
+    <div class="grid">
+        {% for event in events %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div>
+                <h3 style="color: #667eea; margin-top: 0; margin-bottom: 15px;">{{ event.name }}</h3>
+                <p style="margin-bottom: 8px;"><strong>📅 Date:</strong> {{ event.date.strftime('%B %d, %Y') }}</p>
+                <p style="margin-bottom: 8px;"><strong>⏰ Time:</strong> {{ event.date.strftime('%I:%M %p') }}</p>
+                <p style="margin-bottom: 8px;"><strong>📍 Venue:</strong> {{ event.venue }}</p>
+                <p style="margin-bottom: 15px; font-size: 14px; color: #6c757d;">
+                    <strong>👤 Organizer:</strong> {{ event.organizer.username if event.organizer else 'Unknown' }}
+                </p>
+            </div>
+            
+            <div style="margin-top: 15px; border-top: 1px solid #e9ecef; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <a href="{{ url_for('view_event', event_id=event.id) }}" class="btn" style="width: 100%; text-align: center;">
+                    🔍 View & Register
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <p style="color: #6c757d; font-size: 18px;">No events are currently scheduled. Please check back later!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
