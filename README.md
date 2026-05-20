@@ -1,52 +1,26 @@
 # 🎫 Secure Event Pass Generation & Access Validation System
 
-## Lab Evaluation 1 - 23CSE313 Foundations of Cyber Security
 
-A comprehensive web-based application implementing all required security concepts: Authentication, Authorization, Encryption, Hashing, Digital Signatures, and Encoding.
-
+Secure Event Pass Generation and Access Validation issues cryptographically signed QR passes and enforces role-based, MFA-backed validation to prevent forgery and unauthorized entry.
 ---
 
 ## 🔐 Security Features Implemented
 
-### ✅ All 20 Marks Components Covered
+Note: This project was developed as part of a cyber security evaluation.
 
-#### 1. **Authentication (3 marks)**
-- ✅ **Single-Factor Authentication (1.5m)**: Username + Password login
-- ✅ **Multi-Factor Authentication (1.5m)**: Password + TOTP (Time-based OTP from authenticator app)
-- 📱 **Implementation**: Google Authenticator / Authy compatible
+Overview
+--------
+Secure Event Pass System is a web application that demonstrates secure event management, pass generation, and validation using modern cryptographic techniques and best practices. The system is designed for demonstration and evaluation of concepts including authentication, authorization, encryption, hashing, digital signatures, and secure encoding.
 
-#### 2. **Authorization - Access Control (3 marks)**
-- ✅ **Access Control Model (1.5m)**: Access Control List (ACL) with 3+ subjects and objects
-  - Subjects: Admin, Organizer, Attendee users
-  - Objects: Events, Passes, User data
-- ✅ **Policy Definition (1.5m)**: Role-based permissions + ACL implementation
-  - Admin: Full access to all resources
-  - Organizer: Create/manage events, validate passes
-  - Attendee: Generate passes, view own data
+Security features 
+-------------------------
+- Authentication: Username/password with optional TOTP-based MFA for stronger account protection.
+- Authorization: Role-based access control (Admin, Organizer, Attendee) enforced at route and object level.
+- Encryption: Hybrid encryption using AES-256 for data and RSA-2048 for key protection.
+- Hashing & Signatures: PBKDF2-SHA256 for password hashing; SHA256 + RSA signatures for pass authenticity.
+- Encoding: QR codes for pass presentation and Base64 for safe transmission of binary data.
 
-#### 3. **Encryption (3 marks)**
-- ✅ **Key Exchange Mechanism (1.5m)**: RSA-2048 keypair generation per user
-- ✅ **Encryption & Decryption (1.5m)**: Hybrid encryption
-  - AES-256 for data encryption (fast, symmetric)
-  - RSA-2048 for key encryption (secure, asymmetric)
-
-#### 4. **Hashing & Digital Signature (3 marks)**
-- ✅ **Hashing with Salt (1.5m)**: PBKDF2-SHA256 (600,000 iterations) + unique salt per user
-- ✅ **Digital Signature (1.5m)**: SHA256 hash + RSA signing for pass authenticity
-
-#### 5. **Encoding Techniques (3 marks)**
-- ✅ **Encoding Implementation (1m)**: QR Code + Base64 encoding for event passes
-- ✅ **Security Levels & Risks (1m)**: Documented in code and interface
-- ✅ **Possible Attacks (1m)**: Pass forgery prevention, replay attack mitigation
-
-#### 6. **Viva (2m + 3m = 5 marks)**
-- Complete implementation ready for demonstration
-- All security concepts integrated cohesively
-- Clear documentation for explaining design choices
-
----
-
-## 🚀 Installation & Setup (STEP-BY-STEP)
+## 🚀 Installation & Setup 
 
 ### Step 1: Prerequisites
 Make sure you have Python 3.8+ installed:
@@ -160,48 +134,6 @@ The application will start at: **http://127.0.0.1:5000**
 
 ---
 
-## 🎯 For VIVA Questions - Quick Answers
-
-### Q: How does Multi-Factor Authentication work?
-**A**: We use two factors:
-1. **Password** (something you know) - hashed with PBKDF2-SHA256
-2. **OTP** (something you have) - TOTP from authenticator app
-Both must be correct to login.
-
-### Q: Explain your encryption approach?
-**A**: Hybrid encryption:
-- **AES-256** encrypts event data (fast, symmetric)
-- **RSA-2048** encrypts the AES key (secure, asymmetric)
-- Only the organizer with the private key can decrypt
-
-### Q: How do you prevent pass forgery?
-**A**: 
-1. Digital signature using SHA256 hash + RSA signing
-2. Each pass signed with user's private key
-3. Verification using public key during validation
-4. Any tampering invalidates the signature
-
-### Q: Explain Access Control implementation?
-**A**: 
-- **Role-Based**: Admin, Organizer, Attendee roles
-- **ACL**: Permissions stored in AccessControl table
-- Example: Only organizers can validate passes for their events
-- Checked before every operation
-
-### Q: What encoding techniques are used?
-**A**: 
-1. **Base64**: For storing binary data (QR images, signatures)
-2. **QR Code**: Encoding pass data for scanning
-3. **JSON**: Encoding pass information
-
-### Q: How is password security ensured?
-**A**: 
-- Unique random salt per user (64 characters)
-- PBKDF2-SHA256 algorithm
-- 600,000 iterations (OWASP recommendation)
-- Salt stored separately, prevents rainbow table attacks
-
----
 
 ## 📁 Project Structure
 
@@ -245,16 +177,6 @@ event_pass_system/
 
 ---
 
-## 🎬 Quick Demo Script (5 minutes)
-
-1. **"I'll demonstrate authentication"** → Register + show 2FA QR
-2. **"Login with multi-factor"** → Enter password + OTP
-3. **"Create encrypted event"** → Show encryption notification
-4. **"Generate pass with signature"** → Show QR + digital signature
-5. **"Validate with access control"** → Show authorization check
-6. **"All security components integrated"** → Point to security badges
-
----
 
 ## 🛠️ Troubleshooting
 
@@ -273,13 +195,10 @@ app.run(debug=True, port=5001)  # Changed from 5000
 Use manual entry key shown below the QR code in your authenticator app.
 
 ---
+License
+-------
+This project is made  for educational purposes as part of a cyber security evaluation. Check repository settings for license details.
 
-## 📞 Support
 
-For evaluation questions, ensure you can explain:
-1. How each security component works
-2. Where it's implemented in code
-3. Why you chose this approach
-4. What attacks it prevents
 
-**Good luck with your evaluation! 🎉**
+
